@@ -1,0 +1,34 @@
+{
+  "name": "taskify-backend",
+  "version": "1.0.0",
+  "description": "The best task manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snowypy/taskify.git"
+  },
+  "keywords": [
+    "task",
+    "manager"
+  ],
+  "author": "snowyjs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/snowypy/taskify/issues"
+  },
+  "homepage": "https://github.com/snowypy/taskify#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.1",
+    "express-session": "^1.17.3",
+    "passport": "^0.6.0",
+    "passport-github2": "^0.1.12",
+    "react-beautiful-dnd": "^13.1.1",
+    "passport-local": "^1.0.0",
+    "sqlite3": "^5.1.7",
+    "bcrypt": "^5.0.1"
+  }
+}
