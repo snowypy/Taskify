@@ -139,7 +139,6 @@ function TaskPage() {
       return;
     }
 
-    // Create a new array of tasks
     const updatedTasks = tasks.map(task => {
       if (task.id === parseInt(draggableId)) {
         return {
@@ -150,10 +149,8 @@ function TaskPage() {
       return task;
     });
 
-    // Update state immediately
     setTasks(updatedTasks);
 
-    // Update server
     const taskId = parseInt(draggableId);
     const newCategoryId = parseInt(destination.droppableId);
 
@@ -165,7 +162,6 @@ function TaskPage() {
     }).catch(err => {
       console.error('Failed to update task category:', err);
       setError('Failed to update task category');
-      // Revert the change if the server update fails
       setTasks(tasks);
     });
   };
