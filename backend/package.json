@@ -21,14 +21,15 @@
   },
   "homepage": "https://github.com/snowypy/taskify#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "express": "^4.21.1",
     "express-session": "^1.17.3",
+    "motion": "^11.11.17",
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
-    "react-beautiful-dnd": "^13.1.1",
     "passport-local": "^1.0.0",
-    "sqlite3": "^5.1.7",
-    "bcrypt": "^5.0.1"
+    "react-beautiful-dnd": "^13.1.1",
+    "sqlite3": "^5.1.7"
   }
 }

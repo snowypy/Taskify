@@ -3,13 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
 import './TaskPage.css';
-
+import taskIcon from './icons/task-icon.svg';
+import categoryIcon from './icons/category-icon.svg';
+import optionsIcon from './icons/options-icon.svg';
 function TaskPage() {
   const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [newTask, setNewTask] = useState({ title: '', description: '', status: '', tags: '' });
   const [newCategory, setNewCategory] = useState('');
   const [error, setError] = useState('');
+  const [theme, setTheme] = useState('default');
+  const [taskMenuVisible, setTaskMenuVisible] = useState(false);
+  const [categoryMenuVisible, setCategoryMenuVisible] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -88,6 +93,7 @@ function TaskPage() {
         console.log('Task added:', data.id);
         setTasks([...tasks, { ...newTask, id: data.id, categoryId: defaultCategory.id }]);
         setNewTask({ title: '', description: '', status: '', tags: '' });
+        setTaskMenuVisible(false);
       })
       .catch(err => {
         console.error('Failed to add task:', err);
@@ -113,6 +119,7 @@ function TaskPage() {
         console.log('Category added:', data.id);
         setCategories([...categories, { name: newCategory, id: data.id }]);
         setNewCategory('');
+        setCategoryMenuVisible(false);
       })
       .catch(err => {
         console.error('Failed to add category:', err);
@@ -163,66 +170,107 @@ function TaskPage() {
     });
   };
 
+  const handleThemeChange = (e) => {
+    setTheme(e.target.value);
+  };
+
+  const toggleTaskMenu = () => {
+    setTaskMenuVisible(!taskMenuVisible);
+  };
+
+  const toggleCategoryMenu = () => {
+    setCategoryMenuVisible(!categoryMenuVisible);
+  };
+
   return (
     <motion.div 
-      className="task-container"
+      className={`task-container ${theme}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <h1 className="task-title">Tasks</h1>
-      {error && <div className="task-error">{error}</div>}
-      
-      <div className="task-form">
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          value={newTask.title}
-          onChange={handleInputChange}
-          className="task-input"
-        />
-        <input
-          type="text"
-          name="description"
-          placeholder="Description"
-          value={newTask.description}
-          onChange={handleInputChange}
-          className="task-input"
-        />
-        <input
-          type="text"
-          name="status"
-          placeholder="Status"
-          value={newTask.status}
-          onChange={handleInputChange}
-          className="task-input"
-        />
-        <input
-          type="text"
-          name="tags"
-          placeholder="Tags (comma separated)"
-          value={newTask.tags}
-          onChange={handleInputChange}
-          className="task-input"
-        />
-        <button onClick={handleAddTask} className="task-button">
-          Add Task
-        </button>
+      <div className="sidebar">
+        <div className="sidebar-icon" onClick={toggleTaskMenu}>
+          <span>Add Task</span>
+        </div>
+        <div className="sidebar-icon" onClick={toggleCategoryMenu}>
+          <span>Add Category</span>
+        </div>
       </div>
 
-      <div className="category-form">
-        <input
-          type="text"
-          placeholder="New Category"
-          value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
-          className="task-input"
-        />
-        <button onClick={handleAddCategory} className="task-button">
-          Add Category
-        </button>
-      </div>
+      {taskMenuVisible && (
+        <div className="menu-overlay">
+          <div className="menu-box">
+            <h2>Create Task</h2>
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              value={newTask.title}
+              onChange={handleInputChange}
+              className="task-input"
+            />
+            <input
+              type="text"
+              name="description"
+              placeholder="Description"
+              value={newTask.description}
+              onChange={handleInputChange}
+              className="task-input"
+            />
+            <input
+              type="text"
+              name="status"
+              placeholder="Status"
+              value={newTask.status}
+              onChange={handleInputChange}
+              className="task-input"
+            />
+            <input
+              type="text"
+              name="tags"
+              placeholder="Tags (comma separated)"
+              value={newTask.tags}
+              onChange={handleInputChange}
+              className="task-input"
+            />
+            <motion.button 
+              onClick={handleAddTask} 
+              className="task-button"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              Add Task
+            </motion.button>
+          </div>
+        </div>
+      )}
+
+      {categoryMenuVisible && (
+        <div className="menu-overlay">
+          <div className="menu-box">
+            <h2>Create Category</h2>
+            <input
+              type="text"
+              placeholder="New Category"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              className="task-input"
+            />
+            <motion.button 
+              onClick={handleAddCategory} 
+              className="task-button"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              Add Category
+            </motion.button>
+          </div>
+        </div>
+      )}
+
+      <h1 className="task-title">Your Tasks</h1>
+      {error && <div className="task-error">{error}</div>}
 
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="categories">
@@ -257,6 +305,7 @@ function TaskPage() {
                               <p>{task.description}</p>
                               <p>Status: {task.status}</p>
                               <p>Tags: {task.tags}</p>
+                              <img src={optionsIcon} alt="Options" className="task-options" />
                             </motion.li>
                           )}
                         </Draggable>
